@@ -20,7 +20,7 @@ using namespace std;
 CONSTRUCTOR
 
 ----------------------------------
-/*
+*/
 
 GraphicsDisplay::GraphicsDisplay( Xwindow &x, int r, int c ):
 
