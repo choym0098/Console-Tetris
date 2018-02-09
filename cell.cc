@@ -10,8 +10,27 @@
 #include "subject.h"
 using namespace std;
 
+/*
+------------------------
+
+Ctor
+
+------------------------
+*/
+
 Cell::Cell(int row, int col):
   coord{pair<int, int>(row, col)}, block{nullptr} {}
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+/*
+----------------------------------
+
+Methods and Mutators
+
+----------------------------------
+/*
+
 
 pair<int, int> Cell::getCoord() {
   return coord;
@@ -32,6 +51,14 @@ char Cell::getGlyph() {
     return block->getGlyph();
   }
 }
+//////////////////////////////////////////////////////////////////////////////////////////////
+/*
+---------------------
+
+Methods
+
+---------------------
+
 
 void Cell::notify() {
 //  cout << "Cell Notified: " << coord.first << ", " << coord.second << endl;

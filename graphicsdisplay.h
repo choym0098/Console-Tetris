@@ -1,37 +1,20 @@
 #ifndef GRAPHICSDISPLAY_H
 #define GRAPHICSDISPLAY_H
 #include <iostream>
+#include <vector>
 #include "observer.h"
+#include "state.h"
 #include "window.h"
-#include <string>
+#include "info.h"
+class Cell;
 
-class Board;
+class GraphicsDisplay: public Observer<Info, State> {
+  const int gridSize, winSize;
+  Xwindow xw;
 
-class GraphicsDisplay: public Observer {
+ public:
+  GraphicsDisplay(int gridSize, int winSize);
 
-  	Xwindow &window;
-
-  	const int row, col;
-
-  	int Corig=100, Rorig=6, dim=27;
-
-  	std::string Level, Score, HiScore;
-
-   
-
-  public:
-
-  	GraphicsDisplay( Xwindow &x, int r=18, int c=11 );
-	void clearNextBlock();
-  	~GraphicsDisplay() override;
-
-	void notify() override;
-	void notify(Board *whoNotified) override;
+  void notify(Subject<Info, State> &whoNotified) override;
 };
-
-
-
-
-
 #endif
-

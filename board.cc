@@ -7,29 +7,28 @@
 #include "level.h"
 #include <cmath>
 #include <memory>
+#include "window.h"
 using namespace std;
 
+/*
+------------------------
 
-void Board::starCreate(Block *b) {
-	bool empty = false;
-	int newRow = 0;
-	for( int i = 0; i < row - 3; ++i) {
-		if(theBoard[i][col / 2].getGlyph() == ' ') {
-			empty = true;
-			break;
-		}
-		++newRow;
-	}
-	vector<Cell *> v;
-	v.emplace_back(&theBoard[newRow][col / 2]); 	
-	if(empty) {
-		b->place(v);
-	}
-}
+Constructor
 
+------------------------
+*/
 
 Board::~Board() {
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+/*
+-----------------------------
+
+ I/O operation
+
+-----------------------------
+*/
 
 ostream &operator<<(ostream &out, Board &bd) {
 	out << "Level:      " << bd.getLevel() << endl;
@@ -42,6 +41,83 @@ ostream &operator<<(ostream &out, Board &bd) {
 	out << bd.getNextBlock() << endl;
 	return out;
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+/*
+-------------------------------
+
+Accessors and Mutators
+
+-------------------------------
+*/
+
+vector<vector<Cell>> &Board::returnBoard() {
+	return theBoard;
+}
+
+
+int &Board::getScore() {
+	return Score;
+}
+int &Board::getHiScore() {
+	return Hi_Score;
+}
+int &Board::getLevel() {
+	return lvl;
+}
+
+Block *Board::getCurBlock() {
+	int size = vBlock.size();
+	if (size == 0) {
+		return nullptr;
+	} else {
+	  return vBlock[size-1].get();
+	}
+}
+Block *Board::getNextBlock() {
+  return nextBlock.get();
+}
+
+void Board::setNextBlock(unique_ptr<Block> &bd) {
+  swap(nextBlock, bd);
+}
+//Not sure if we make the Board have a level
+
+
+void Board::setCurBlock(unique_ptr<Block> &bp) {
+  Block *b = bp.get();
+  auto newcoords = b->getCoOrd();
+	vector<Cell*> v;
+	for (unsigned int i =0; i < newcoords.size(); ++i) {
+		newcoords[i].first += 15;
+		v.emplace_back(&theBoard[newcoords[i].first][newcoords[i].second]);
+	}
+	
+	bool isItEmpty=true;
+	for(unsigned int i = 0; i < newcoords.size(); ++i) {
+		if(theBoard[newcoords[i].first][newcoords[i].second].getGlyph() != ' ') {
+			isItEmpty = false;
+		}
+	}
+	if(isItEmpty) {
+		b->place(v);
+		vBlock.emplace_back(nullptr);
+		swap(vBlock.back(), bp);
+		Pivot = findPivot(findCorners(vBlock[vBlock.size() - 1]->getCoOrd()));
+	} else {
+		restart();
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+/*
+-----------------------
+
+Methods
+
+-----------------------
+*/
+
 
 vector<pair<int,int>> findCorners(vector<pair<int,int>> v) { //1st = bottom left, 2nd = bottom-right, 3rd = top-left, 4th = top-right
         int minRow=100;
@@ -144,19 +220,23 @@ vector<pair<int, int>> Board::rotate_findNewLocation(vector<pair<int, int>> v) {
 }
 
 
+// Initialize a board
 void Board::init(int r, int c) {
+	xWindows xv;
 	td = new TextDisplay{r, c};
+
+	----------------------------------------------------
+	//Attach Textdisplay and xWindows to a vector of observers in Subject
 	this->attach(td);
+	this->attach(xv);
+	
+	-----------------------------------------------------
+
 	row = r;
 	col = c;
-	//assign remaining ptrs to corresponding objects;
-	vector<unique_ptr<Block>> vB;
-	vB.emplace_back(nullptr);
 
+	//Initialize theBoard : Default (row = 15, col = 11)
 
-	//////////////////////////////////////////////////
-
-	//Initialize theBoard;
 	for (int i = 0; i < r; ++i) {
 		vector<Cell> row;
 		for(int j = 0; j < c; ++j) {
@@ -168,10 +248,6 @@ void Board::init(int r, int c) {
 	td->setBoard(this);
 }
 
-
-vector<vector<Cell>> &Board::returnBoard() {
-	return theBoard;
-}
 
 bool Board::isBoardFull() {
 	for(int i = 0; i < row - 3; ++i) {
@@ -189,59 +265,6 @@ bool Board::isRowFull(int r) {
 		}
 	}
 	return true;
-}
-
-int &Board::getScore() {
-	return Score;
-}
-int &Board::getHiScore() {
-	return Hi_Score;
-}
-int &Board::getLevel() {
-	return lvl;
-}
-
-Block *Board::getCurBlock() {
-	int size = vBlock.size();
-	if (size == 0) {
-		return nullptr;
-	} else {
-	  return vBlock[size-1].get();
-	}
-}
-Block *Board::getNextBlock() {
-  return nextBlock.get();
-}
-
-void Board::setNextBlock(unique_ptr<Block> &bd) {
-  swap(nextBlock, bd);
-}
-//Not sure if we make the Board have a level
-
-
-void Board::setCurBlock(unique_ptr<Block> &bp) {
-  Block *b = bp.get();
-  auto newcoords = b->getCoOrd();
-	vector<Cell*> v;
-	for (unsigned int i =0; i < newcoords.size(); ++i) {
-		newcoords[i].first += 15;
-		v.emplace_back(&theBoard[newcoords[i].first][newcoords[i].second]);
-	}
-	
-	bool isItEmpty=true;
-	for(unsigned int i = 0; i < newcoords.size(); ++i) {
-		if(theBoard[newcoords[i].first][newcoords[i].second].getGlyph() != ' ') {
-			isItEmpty = false;
-		}
-	}
-	if(isItEmpty) {
-		b->place(v);
-		vBlock.emplace_back(nullptr);
-		swap(vBlock.back(), bp);
-		Pivot = findPivot(findCorners(vBlock[vBlock.size() - 1]->getCoOrd()));
-	} else {
-		restart();
-	}
 }
 
 

@@ -7,26 +7,40 @@
 #include "command.h"
 class Level{
 protected:
-  std::unique_ptr<Command> c;
-   bool isSequenceFile;
-   bool isRandomFile;
-   int lev_num;
-   int seed;
-   std::string RandomFile;
-   std::string SequenceFile;
-   std::ifstream block_generator;
-   std::ifstream command_generator;
+
+	std::unique_ptr<Command> c;
+	int lev_num;
+int seed;
+std::string RandomFile;
+	std::string SequenceFile;
+	std::ifstream block_generator;
+	std::ifstream command_generator;
+
+
+	// CHECK
+
+	bool isSequenceFile;
+	bool isRandomFile;
+bool isRandomFileSet();
+bool isSequenceFileSet();
+
+
         //Helper Functions
-   char strToChar(std::string letter);
-   void setCurBlock(std::string letter);
-   void setNextBlock(std::string letter);
+
+  	char strToChar(std::string letter);
+  	void setCurBlock(std::string letter);
+   	void setNextBlock(std::string letter);
+
+
         //Methods for Sequence Command
-   void setSequenceFile(const std::string file);
-   void unSetSequenceFile();
-   bool isSequenceFileSet();
+
+  	void setSequenceFile(const std::string file);
+   	void unSetSequenceFile();
+   
         //Methods for Random Block Generation
-   void unSetRandomFile();
-   bool isRandomFileSet();
+
+   	void unSetRandomFile();
+   
         //Commands that affect Board State
    virtual void left();
    virtual void right();

@@ -13,17 +13,11 @@
 using namespace std;
 
 /*
-void Block::clearCellPointers(vector<Cell*> vCells) {
-  for (auto n : vCells) {
-    n.setBlock(nullptr);
-  }
-}
+---------------------------------
 
-void Block::setCellPointers(vector<Cell*> vCells) {
-  for (auto n : vCells) {
-    n.setBlock(this)
-  }
-}
+Constructor
+
+---------------------------------
 */
 
 Block::Block(char g, int levelGenerated):
@@ -45,16 +39,15 @@ Block::Block(char g, int levelGenerated):
   } 
 }
 
+
 /*
-int Block::numBlocks() {
-  auto ob = getObservers();
-  vector<Cell*> vec (ob.size());
-  transform(ob.begin(), ob.end(), vec.begin(),
-	    [] (Observer* op) {return dynamic_cast<Cell*>(op);});
-  int x = count_if(vec.begin(), vec.end(), [](Cell *op){return op;});
-  return x;
-}
+------------------------
+
+Accessors
+
+------------------------
 */
+
 
 char Block::getGlyph() {
   return glyph;
@@ -81,6 +74,17 @@ void Block::place(vector<Cell*> newLoc) {
   
 }
 
+
+
+/*
+------------------------------
+
+Methods
+
+------------------------------
+*/
+
+
 void Block::clearCoord(pair<int,int> p) {
   vector<int> index;
   for (unsigned int i = 0; i < CoOrd.size(); ++i) {
@@ -92,6 +96,17 @@ void Block::clearCoord(pair<int,int> p) {
     CoOrd.erase(CoOrd.begin() + j);
   }
 }
+
+
+/*
+-----------------------------
+
+I/O operation
+
+-----------------------------
+*/
+
+
 
 ostream &operator<<(ostream &out, Block *b) {
   char l = b->getGlyph();

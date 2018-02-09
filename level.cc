@@ -7,14 +7,24 @@
 #include "block.h"
 using namespace std;
 
+// CONSTRUCTOR ==============================================
+
 Level::Level(int n,shared_ptr<Board>theBoard):isSequenceFile{false},isRandomFile{false},lev_num{n},seed{0},theBoard{theBoard}{}
 
+//============================================================
+
+// HELPER FUCTION
 char Level::strToChar(string letter){
     istringstream iss(letter);
     char c;
     iss >> c;
     return c;
 }
+
+
+
+// MUTATORS  AND ACCESORS==============================================================
+
 void Level::setCurBlock(string letter){
   auto b = make_unique<Block>(strToChar(letter),lev_num);
   theBoard->setCurBlock(b);
@@ -47,15 +57,6 @@ void Level::setSequenceFile(const string file){
   }
 
 }
-
-void Level::unSetSequenceFile(){
-    isSequenceFile = false;
-}
-
-bool Level::isSequenceFileSet(){
-    return isSequenceFile;
-}
-
 void Level::setRandomFile(const string file){
     if(RandomFile.empty()){
         RandomFile = file;
@@ -73,9 +74,46 @@ void Level::setRandomFile(const string file){
 void Level::unSetRandomFile(){
     isRandomFile = false;
 }
+
+void Level::setBoard(shared_ptr<Board>theBoard){
+    //Create the first block
+    string letter = chooseBlockLetter();
+    setCurBlock(letter);
+    //Create Next Block
+    letter = chooseBlockLetter();
+    setNextBlock(letter);
+}
+
+
+
+//============================================================
+
+
+
+// CHECK ======================================================
+void Level::unSetSequenceFile(){
+    isSequenceFile = false;
+}
+
+bool Level::isSequenceFileSet(){
+    return isSequenceFile;
+}
+
 bool Level::isRandomFileSet(){
     return isRandomFile;
 }
+
+//============================================================
+
+
+//============================================================
+/*
+------------------------------
+
+OPERATIONS
+
+------------------------------
+*/
 
 void Level::left(){
     theBoard->left();
@@ -109,14 +147,8 @@ void Level::makeBlock(){
         throw error;
     }
 }
-void Level::setBoard(shared_ptr<Board>theBoard){
-    //Create the first block
-    string letter = chooseBlockLetter();
-    setCurBlock(letter);
-    //Create Next Block
-    letter = chooseBlockLetter();
-    setNextBlock(letter);
-}
+
+
 void Level::play(){
     theBoard->notifyObservers();
     cout << *theBoard;
@@ -188,6 +220,11 @@ void Level::play(){
 
 
 }
+
+
+//============================================================
+
+
 
 Level::~Level() = default;
 
@@ -394,7 +431,9 @@ string Level4::chooseBlockLetter(){
             setRandomFile(RandomFile);
             block_generator >> letter;
         }
-   
+    }else if(turnsSinceClear == 4){
+        letter = "*";
+        turnsSinceClear = 0;
     }else{
     		//All blocks are equal prob 
         int letter_num = rand() % 9;
@@ -465,11 +504,7 @@ void Level4::play(){
             if(oldScore != theBoard->getScore()){
                 //Line was cleared
                 turnsSinceClear = 0;
-            }  if (turnsSinceClear == 5) {
-		char asdf = '*';
-                Block *boo = new Block{asdf, 4};
-                theBoard->starCreate(boo);
-	    }
+            }
             try{
                 this->makeBlock(); //By default, a new block is made after being dropped
             }catch(string error){

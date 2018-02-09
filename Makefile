@@ -1,6 +1,6 @@
 CXX = g++
 CXXFLAGS = -std=c++14 -Wall -MMD -Werror=vla
-OBJECTS = window.o graphicsdisplay.o main.o game.o command.o level.o block.o board.o cell.o  subject.o textdisplay.o
+OBJECTS = main.o game.o command.o level.o block.o board.o cell.o  subject.o textdisplay.o
 DEPENDS = ${OBJECTS:.o=.d}
 EXEC = quadris
 

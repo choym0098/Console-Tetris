@@ -20,7 +20,6 @@ class Board: public Subject {
 	std::unique_ptr<Block> nextBlock = nullptr;
 	int lvl = 0; // Current level;
 	TextDisplay *td = nullptr; // The Text Displayer
-	Block *tempBlock = nullptr;
 protected:
 	std::pair<double, double> Pivot;
 public:
@@ -29,47 +28,54 @@ public:
 	bool isItEmpty;
 
 	~Board();
-	void starCreate(Block *);
-	//
+	
+
+	// OPERATIONS
 	void init(int r, int c); //Initial Board 
-	TextDisplay * returnTD();
+	std::vector<Cell *> guideBlock(int r, int c, Block *b); // Let the block know where it's goning to be located
+	void moveBlock(int r, int c, Block *b); //update the block (change cells in block to new cells)
+	void deleteLine(); // when a line is full, delete the line
+	Cell* CoordsToLoc(std::pair<int,int> p);
+	void deleteLineMover(int r);
+
+
+
+	// CHECK
 	bool isBoardFull(); // check if BOARD is full
 	bool isRowFull(int r); // check if the r-th row is full
+	bool isGameOver();	
+	bool isEmpty(std::vector<std::pair<int,int>> v); //Are the cells at these coordinates empty?
+	std::vector<std::pair<int, int>> rotate_findNewLocation(std::vector<std::pair<int, int>> v);
+
+
+
+	// ACCESORS
 	int &getScore();
 	int &getHiScore();
 	int &getLevel(); 
-
-	bool isGameOver();	
+	TextDisplay * returnTD();
 	std::vector<std::vector<Cell>> &returnBoard();
 	Block *getCurBlock();
 	Block *getNextBlock();
-	std::vector<std::pair<int, int>> rotate_findNewLocation(std::vector<std::pair<int, int>> v);	
-	
-	
+
+
+
+	// MUTATORS
 	void setNextBlock(std::unique_ptr<Block> &bd);
-	void setCurBlock(std::unique_ptr<Block> &bp); //the last item in vBlock 
-
+	void setCurBlock(std::unique_ptr<Block> &bp); //the last item in vBlock 	
 	
-	std::vector<Cell *> guideBlock(int r, int c, Block *b); // Let the block know where it's goning to be located
-	void moveBlock(int r, int c, Block *b); //update the block (change cells in block to new cells)
-	
-	bool isEmpty(std::vector<std::pair<int,int>> v); //Are the cells at these coordinates empty?
 
-	void deleteLine(); // when a line is full, delete the line;
-	//Commands
-	void left(); // Moves curBlock to left
-	void right(); // Moves curBlock to right
-	void down(); // Moves curBlock down by 1
-	void drop(); // Drops curBlock to the bottom
-	void restart(); // clears theBoard and remake new one
-	void clockwise(); // rotates curBlock 90 degree clockwise
-	void counterclockwise(); // rotates curBlock 90 degree counterclockwise
-//	void hint(); // gives user the best place to put curBlock
 
+	// COMMANDS
+	void left();                                    // Moves curBlock to left
+	void right();                                  // Moves curBlock to right
+	void down(); 				  // Moves curBlock down by 1
+	void drop(); 				  // Drops curBlock to the bottom
+	void restart(); 			  // clears theBoard and remake new one
+	void clockwise(); 			  // rotates curBlock 90 degree clockwise
+	void counterclockwise();		  // rotates curBlock 90 degree counterclockwise
 	friend std::ostream &operator<<(std::ostream &out,  Board &bd);
-
-	Cell* CoordsToLoc(std::pair<int,int> p);
-	void deleteLineMover(int r);
+	
 };
 
 #endif
