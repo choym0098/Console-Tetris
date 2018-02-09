@@ -16,13 +16,21 @@ class TextDisplay: public Observer {
 	int col;
 	Board *b;
 public:
-	void setBoard(Board *b);
 	~TextDisplay();
 	TextDisplay(int r, int c);
+
+	// ACCESSORS AND MUTATORS
 	int getRow();
 	int getCol();
+	void setBoard(Board *b);
+
+
+	//NOTIFY
 	void notify() override;
 	void notify(Subject*) override;
+
+
+	// I/O
 	friend std::ostream &operator<<(std::ostream &out, TextDisplay &td);
 };
 #endif
