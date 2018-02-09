@@ -12,7 +12,7 @@ using namespace std;
 CONSTRUCTOR
 
 ----------------------------------
-/*
+*/
 
 Command::Command(string command_file):command_file{command_file}{}
 pair<string,int> Command::getCommand(string input){
