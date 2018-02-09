@@ -113,14 +113,10 @@ ostream &operator<<(ostream &out, Block *b) {
   Block tempblock = Block(l, 0);
   auto c = tempblock.getCoOrd();
   string e = "    ";
-  vector<string> v{e,e};
-//  for_each(c.begin(), c.end(), [&](pair<int,int> p){
-//      v[p.first + 1][p.second] = l;
-//    });
- 
- for (auto p : c) {
+  vector<string> v{e,e}; 
+  for (auto p : c) {
    v[p.first + 1][p.second] = l;
- }
+  }
   out << v[1] << endl << v[0] << endl;
 
   return out;

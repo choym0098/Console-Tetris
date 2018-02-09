@@ -26,7 +26,7 @@ Cell::Cell(int row, int col):
 /*
 ----------------------------------
 
-Methods and Mutators
+ACEESORS AND MUTATORS
 
 ----------------------------------
 /*
@@ -58,16 +58,9 @@ char Cell::getGlyph() {
 Methods
 
 ---------------------
-
+*/
 
 void Cell::notify() {
-//  cout << "Cell Notified: " << coord.first << ", " << coord.second << endl;
-  //auto bCoord = block->getCoOrd();
-  //auto p = find(bCoord.begin(), bCoord.end(), coord);
-  //  if (p == bCoord.end()) {
-    //    block->detach(this);
-    setBlock(nullptr);
-    //}
 }
 
 void Cell::notify(Subject* b) {
